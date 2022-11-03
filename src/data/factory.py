@@ -65,6 +65,7 @@ def fetch_dataset(dataset, root, train=True, cropshift=(0, 9), idbh='cb', split=
             T.RandomHorizontalFlip(),
             CropShift(*cropshift),
             IDBH(idbh),
+            T.RandomErasing(0.5),
             T.ToTensor()
         ])
     else:
