@@ -31,7 +31,7 @@ parser.add_argument('-v', '--version', choices=['acc', 'swa_pgd', 'swa_end', 'pg
 parser.add_argument('-t', '--transfer',
                     help="the log id of model whose adversarial examples to be transferred")
 
-parser.add_argument('-a', '--attack', choices=['FGSM', 'FGM', 'AA','PGD', 'BA', 'HSJ', 'CW', 'APGD'],
+parser.add_argument('-a', '--attack', choices=['FGSM', 'AA','PGD', 'CW', 'APGD'],
                     type=upper,
                     default=None,
                     help="attack method for crafting adversarial examples")
@@ -47,8 +47,6 @@ parser.add_argument('--eps_step', type=pixel_2_real, default=None,
                     help="step size for multi-step attacks")
 parser.add_argument('--nrandom_init', dest='num_random_init', type=int, default=0,
                     help="num of random iniailization when generating adversarial examples")
-
-parser.add_argument('--metrics', nargs='+', choices=['ig', 'hs'], default=[])
 
 def parse_ids(ids):
     log_ids = []

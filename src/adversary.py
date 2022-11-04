@@ -15,11 +15,9 @@ from config.config import real_2_pixel
 from config.adversary import *
 from src.model.factory import fetch_model, ARCHS
 from src.data.factory import fetch_dataset, DATASETS
-from src.data.dataset import collate
 from src.utils.helper import accuracy, gather_all, run, AverageMeter, ProgressMeter
 from src.utils.printer import sprint
 from src.utils.adversary import *
-from src.utils.grad import hessian_spectrum
 
 def attack(args):
     for lid in args.log_ids:
@@ -44,8 +42,7 @@ def _attack(lid, args):
         acc_nsamples = [sum(split[:i+1]) for i in enumerate(split)]
         dataset = dataset[args.rank]
     loader = DataLoader(dataset,
-                        batch_size=args.batch_size,
-                        collate_fn=collate)
+                        batch_size=args.batch_size)
 
     model_lid = args.transfer if transfer else lid
     version = 'acc' if transfer else args.version
@@ -82,18 +79,6 @@ def _attack(lid, args):
     acc = AverageMeter('Acc@1', ':6.2f')
     meters = [batch_time, losses, acc]
 
-    eval_ig = 'ig' in args.metrics
-    eval_hs = 'hs' in args.metrics
-    
-    if eval_ig:
-        igs = AverageMeter('IG', ':.2e')
-        meters.append(igs)
-
-    if eval_hs:
-        hss = AverageMeter('IG', ':.2e')
-        meters.append(hss)
-
-        
     progress = ProgressMeter(len(loader), meters, prefix="Batch: ")
     
     sprint("Adversary evaluation starts!", True)
@@ -107,18 +92,8 @@ def _attack(lid, args):
         if args.attack is not None:
             imgs = attack(imgs, labels).detach()
 
-        imgs.requires_grad = eval_ig or eval_hs
         output = model(imgs)
         loss = criterion(output, labels)
-
-        if eval_ig:
-            ig = tc.norm(grad(loss, imgs)[0], p=1).item()
-            igs.update(ig, batch_size)
-
-        if eval_hs:
-            hs = hessian_spectrum(imgs, labels, model, criterion, 20)
-            hs = mean(abs(eigen) for eigen in hs)
-            hss.update(hs, batch_size)
             
         acc.update(accuracy(output, labels, topk=(1,))[0], batch_size)
         losses.update(loss.item(), batch_size)
@@ -150,14 +125,6 @@ def _attack(lid, args):
             if args.attack == 'PGD' or args.attack == 'APGD':
                 strength += '_{}'.format(args.max_iter)
             logger.update('robustness', attack, **{strength:acc.avg.item()}, ids=lid, save=True)
-
-        if eval_ig:
-            info = {'ig_{}'.format(args.version) : igs.avg}
-            logger.update('checkpoint', **info, ids=lid, save=True)
-        if eval_hs:
-            info = {'hs_{}'.format(args.version) : hss.avg}
-            logger.update('checkpoint', **info, ids=lid, save=True)
-            
             
 if __name__ == '__main__':
     cfg = AdversaryConfig()
