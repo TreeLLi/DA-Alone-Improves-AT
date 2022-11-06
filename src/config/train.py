@@ -15,9 +15,7 @@ from src.config.config import PARSER as SHARED
 parser = ArgumentParser(parents=[SHARED])
 
 # Model
-archs = ["wresnet", "paresnet"]
-
-parser.add_argument('-a', '--arch', choices=archs, default='wresnet',
+parser.add_argument('-a', '--arch', choices=["wresnet", "paresnet"], default='wresnet',
                     help="the neural network architecture to be used")
 parser.add_argument('--width', type=int, default=1,
                     help="the width factor for widening conv layers")
@@ -51,8 +49,6 @@ parser.add_argument('-wd', '--weight_decay', type=float, default=5e-4,
                    help="weight decay in optimizer")
 parser.add_argument('-e', '--epochs', type=int, default=200,
                    help="maximum amount of epochs to be run")
-parser.add_argument('--augment', nargs='+', default=[],
-                   help="input data augmentation")
 parser.add_argument('--swa', nargs='+', default=None,
                    help="enable stochastic weight averaging")
 

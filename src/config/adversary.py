@@ -12,10 +12,6 @@ from src.config.config import PARSER as SHARED
 from src.utils.log import ids_from_idx, idx_from_ids, complete_ids
 
 parser = ArgumentParser(parents=[SHARED])
-
-parser.add_argument('--save', action='store_true',
-                    help="save the crafted adversarial examples")
-
 parser.add_argument('--train', action='store_true', default=False,
                     help="evaluate on training set")
 parser.add_argument('--augment', nargs='+', default=None,

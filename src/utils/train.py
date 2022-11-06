@@ -88,9 +88,6 @@ def train(args):
 
     fargs = args.func_arguments(fetch_optimizer, OPTIMS, checkpoint=checkpoint)
     optimizer = fetch_optimizer(params=model.parameters(), **fargs)
-
-    # free the memory taken by the checkpoint
-    checkpoint = None
     
     if args.advt:
         dprint('adversary', **{k:getattr(args, k, None)

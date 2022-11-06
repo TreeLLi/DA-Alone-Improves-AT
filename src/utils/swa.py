@@ -1,5 +1,7 @@
 '''
-Code from Robust overfitting can be alliviated 
+Code from Robust Overfitting may be mitigated by properly learned smoothening
+
+URL: https://github.com/VITA-Group/Alleviate-Robust-Overfitting
 
 '''
 

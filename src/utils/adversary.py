@@ -1,9 +1,15 @@
 import torch as tc
+from torch.autograd import grad
 
 from torchattacks import *
 
 from src.utils.printer import dprint
-from src.utils.grad import input_grad
+
+def input_grad(imgs, targets, model, criterion):
+    output = model(imgs)
+    loss = criterion(output, targets)
+    ig = grad(loss, imgs)[0]
+    return ig
 
 def perturb(imgs, targets, model, criterion, eps, eps_step, pert=None, ig=None):
     adv = imgs.requires_grad_(True) if pert is None else tc.clamp(imgs+pert, 0, 1).requires_grad_(True)

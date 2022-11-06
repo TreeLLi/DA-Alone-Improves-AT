@@ -85,3 +85,34 @@ class IDBH(tc.nn.Module):
                 return self.transform(img, trans)
         
         return img
+
+class CropShift(tc.nn.Module):
+    def __init__(self, low, high=None):
+        super().__init__()
+        high = low if high is None else high
+        self.low, self.high = int(low), int(high)
+        
+    def sample_top(self, x, y):
+        x = tc.randint(0, x+1, (1,)).item()
+        y = tc.randint(0, y+1, (1,)).item()
+        return x, y
+            
+    def forward(self, img):
+        if self.low == self.high:
+            strength = self.low
+        else:
+            strength = tc.randint(self.low, self.high, (1,)).item()
+        
+        w, h = F.get_image_size(img)
+        crop_x = tc.randint(0, strength+1, (1,)).item()
+        crop_y = strength - crop_x
+        crop_w, crop_h = w - crop_x, h - crop_y
+
+        top_x, top_y = self.sample_top(crop_x, crop_y)
+        
+        img = F.crop(img, top_y, top_x, crop_h, crop_w)
+        img = F.pad(img, padding=[crop_x, crop_y], fill=0)
+        
+        top_x, top_y = self.sample_top(crop_x, crop_y)
+        
+        return F.crop(img, top_y, top_x, h, w)
