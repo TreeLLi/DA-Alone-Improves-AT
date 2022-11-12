@@ -3,7 +3,7 @@ data augmentation alone can improve adversarial training
 
 # Pre-trained Models
 
-Please find the pre-trained models through this [link]([model-zoo](https://emckclac-my.sharepoint.com/:f:/g/personal/k19010102_kcl_ac_uk/EnVH6skz4q1FoamAcrPRkdgBpNEDkpL9cSIgttJDjKs1AQ?e=vMgaHB)).
+Please find the pre-trained models through this OneDrive [sharepoint.](https://emckclac-my.sharepoint.com/:f:/g/personal/k19010102_kcl_ac_uk/EnVH6skz4q1FoamAcrPRkdgBpNEDkpL9cSIgttJDjKs1AQ)
 
 # Files
 
