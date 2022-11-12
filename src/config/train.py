@@ -32,10 +32,8 @@ parser.add_argument('-d', '--dataset', choices=['TIN', 'CIFAR10', 'SVHN'], type=
                     help="the dataset to be used")
 parser.add_argument('--download', action='store_true',
                     help="download dataset if not exists")
-parser.add_argument('--idbh', choices=['cb', 'sb'], default='cb',
-                   help="")
-parser.add_argument('--cropshift', nargs='+', type=int, default=(0, 10),
-                   help="lower and upper bound to sample the strength of cropshift")
+parser.add_argument('--idbh', choices=['cifar10-strong', 'cifar10-weak', 'svhn'], default='cifar10-weak',
+                   help="the version of IDBH")
 
 
 # Learning Arguments
@@ -50,7 +48,7 @@ parser.add_argument('-wd', '--weight_decay', type=float, default=5e-4,
 parser.add_argument('-e', '--epochs', type=int, default=200,
                    help="maximum amount of epochs to be run")
 parser.add_argument('--swa', nargs='+', default=None,
-                   help="enable stochastic weight averaging")
+                   help="three parameters should be given: int: from which epoch to start SWA; float: averaging weight; int: averaged per ? iterations")
 
 parser.add_argument('--optim', choices=['sgd', 'adam'], default='sgd',
                    help="optimizer")

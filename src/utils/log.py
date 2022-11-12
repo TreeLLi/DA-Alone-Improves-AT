@@ -6,8 +6,8 @@ from addict import Dict
 from filelock import FileLock
 
 RECORD = Dict({'model' : ['arch', 'checkpoint', 'width', 'depth', 'activation'],
-          'dataset' : ['dataset'],
-          'training' : ['optim', 'lr', 'batch_size', 'augment', 'annealing', 'momentum', 'weight_decay', 'swa']})
+          'dataset' : ['dataset', 'idbh'],
+          'training' : ['optim', 'lr', 'batch_size', 'annealing', 'momentum', 'weight_decay', 'swa']})
 
 BASE = 36
 ID_LENGTH = 4

@@ -1,9 +1,46 @@
 import math
 import torch as tc
+import torchvision.transforms as T
 from torchvision.transforms import functional as F
 from torchvision.transforms import InterpolationMode as Interpolation
 
 class IDBH(tc.nn.Module):
+    def __init__(self, version):
+        super().__init__()
+        if version == 'cifar10-weak':
+            layers = [
+                T.RandomHorizontalFlip(),
+                CropShift(0, 11),
+                ColorShape('color'),
+                T.ToTensor(),
+                T.RandomErasing(p=0.5)
+            ]
+        elif version == 'cifar10-strong':
+            layers = [
+                T.RandomHorizontalFlip(),
+                CropShift(0, 11),
+                ColorShape('color'),
+                T.ToTensor(),
+                T.RandomErasing(p=1)
+            ]
+        elif version == 'svhn':
+            layers = [
+                T.RandomHorizontalFlip(),
+                CropShift(0, 9),
+                ColorShape('shape'),
+                T.ToTensor(),
+                T.RandomErasing(p=1, scale=(0.02, 0.5))
+            ]
+        else:
+            raise Exception("IDBH: invalid version string")
+        
+        self.layers = T.Compose(layers)
+            
+    def forward(self, img):
+        return self.layers(img)
+    
+        
+class ColorShape(tc.nn.Module):
     ColorBiased = [
         (0.125, 'color', 0.1, 1.9),
         (0.125, 'brightness', 0.5, 1.9),
@@ -25,12 +62,15 @@ class IDBH(tc.nn.Module):
         (0.3, 'rotate', 1, 31)
     ]
     
-    def __init__(self, space=None):
+    def __init__(self, version='color'):
         super().__init__()
 
+        assert version in ['color', 'shape']
+        space = self.ColorBiased if version == 'color' else self.ShapeBiased
+        
         self.space = {}
         p_accu = 0.0
-        for trans in self.ColorBiased:
+        for trans in space:
             p = trans[0]
             self.space[(p_accu, p_accu+p)] = trans[1:]
             p_accu += p

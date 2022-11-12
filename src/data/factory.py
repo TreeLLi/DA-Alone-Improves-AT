@@ -2,7 +2,7 @@ import os
 import torch as tc
 import torchvision.transforms as T
 from torchvision.datasets import CIFAR10, ImageFolder, SVHN
-from src.data.augment import IDBH
+from src.data.idbh import IDBH
 
 from torch.utils.data import random_split, Subset
 
@@ -22,7 +22,7 @@ DATASETS = {'TIN' : TinyImageNet,
 
 
 
-def fetch_dataset(dataset, root, train=True, cropshift=(0, 9), idbh='cb', split=False, download=False):
+def fetch_dataset(dataset, root, train=True, idbh='cifar10-weak', split=False, download=False):
     assert dataset in DATASETS
     
     # hyper-parameter report
@@ -30,16 +30,12 @@ def fetch_dataset(dataset, root, train=True, cropshift=(0, 9), idbh='cb', split=
     dprint(head, dataset=dataset)
 
     if train:
-        augment = T.Compose([
-            T.RandomHorizontalFlip(),
-            CropShift(*cropshift),
-            IDBH(idbh),
-            T.ToTensor(),
-            T.RandomErasing(0.5)
-        ])
+        augment = IDBH(idbh)
     else:
         augment = T.ToTensor()
-    
+
+    if dataset == 'SVHN':
+        train = 'train' if train else 'test'
     dataset = DATASETS[dataset](root, train, download=download, transform=augment)
 
     if split > 1:
