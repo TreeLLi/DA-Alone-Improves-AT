@@ -1,5 +1,5 @@
 # Data Augmentation Alone Can Improve Adversarial Training
-data augmentation alone can improve adversarial training
+This repository contains the code of data augmentation algorithms, **Cropshift** and **IDBH**, and pre-trained models from the paper "[Data Augmentation Alone Can Improve Adversarial Training](https://openreview.net/forum?id=y4uc4NtTWaq)" published at ICLR 2023.
 
 # Pre-trained Models
 
@@ -17,7 +17,7 @@ Please find the pre-trained models through this OneDrive [sharepoint.](https://e
   * `utils`: shared utilities such as training, evaluation, log, printing, adversary, multiprocessing distribution
   * `model/`: model architectures
   * `data/`: data processing
-    * `idbh.py`: the implementation of Cropshift and IDBH
+    * `idbh.py`: **the implementation of Cropshift and IDBH**
   * `config/`: configurations for training and adversarial evaluation
     * `config.py`: hyper-parameters shared between `src/train.py` and `src/adversary.py`
     * `train.py`: training specific configurations
@@ -42,7 +42,7 @@ To prepare the involved dataset, an optional parameter `--download` should be sp
 
 # Dependencies
 
-* The training script is based on the PyTorch official [example](https://github.com/pytorch/examples/tree/master/imagenet)
+* The training script is based on [Combating-RO-AdvLC](https://github.com/TreeLLi/Combating-RO-AdvLC)
 * the code of Wide ResNet is a revised version of [wide-resnet.pytorch](https://github.com/meliketoy/wide-resnet.pytorch).
 * the code of PreAct ResNet is from [Alleviate-Robust_Overfitting](https://github.com/VITA-Group/Alleviate-Robust-Overfitting)
 * Stochastic Weight Averaging (SWA): [Alleviate-Robust_Overfitting](https://github.com/VITA-Group/Alleviate-Robust-Overfitting)
