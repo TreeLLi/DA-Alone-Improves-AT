@@ -3,6 +3,22 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+*.html
+*~
+*.xlsx
+
+/script
+/output
+/server
+/model/*
+/data
+!data/*.py
+/tmp
+*tar
+/slurm_logs
+/paper
+
+
 # C extensions
 *.so
 
